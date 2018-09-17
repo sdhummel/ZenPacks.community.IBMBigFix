@@ -1,0 +1,51 @@
+name: ZenPacks.community.IBMBigFix
+
+zProperties:
+  DEFAULTS:
+    category: IBM BigFix
+
+  zBigFixDiagnosticPort:
+    default: 52311
+  zBigFixDiagnosticURL:
+    default: https://${here/manageIp}:{zBigFixDiagnosticPort}/rd/
+
+event_classes:
+  /Perf/FillDB:
+    description: FillDB Performance Class
+
+device_classes:
+  /IBMBigFix:
+    templates:
+      FillDB:
+        description: FillDB Monitoring using the Diagnostic Page
+        targetPythonClass: ZenPacks.community.IBMBigFix.FillDB
+
+        datasources:
+          FileSize:
+            type: Python
+            plugin_classname: ZenPacks.community.IBMBigFix.FillDB.filesize
+            cycletime: "30"
+            datapoints:
+              file_size: GAUGE
+          FileCount:
+            type: Python
+            plugin_classname: ZenPacks.community.IBMBigFix.FillDB.FileCount
+            cycletime: "30"
+            datapoints:
+              file_count: GAUGE
+              
+
+        graphs:
+          FillDB:
+            miny: 0
+            maxy: 150
+            units: "Percentage"
+
+            graphpoints:
+              File Size:
+                dpName: file_size
+                format: "%7.2lf"
+
+              File Count:
+                dpName: file_count
+                format: "%7.2lf"
